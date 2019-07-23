@@ -12,12 +12,15 @@ using System.Data.SqlClient;
 using System.Xml.Linq;
 using System.ServiceModel.Syndication;
 
+
+
 namespace HaberCekme
 {
     public partial class Form1 : Form
     {
         SqlConnection con = new SqlConnection("Data Source=KAMILEENER-DELL\\KAMILEENER;Initial Catalog=haberCek;Integrated Security=True");
         SqlCommand cmd;
+        SqlTransaction islem = null;
         
 
        public Form1()
@@ -87,10 +90,8 @@ namespace HaberCekme
 
         }
 
-
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
+        {          
             listBox1.Items.Clear();
 
             listBox1.FormattingEnabled = true;
@@ -109,11 +110,9 @@ namespace HaberCekme
             DataTable dt = new DataTable();
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             da.Fill(dt);
-
-            
+           
                 string link = dt.Rows[0]["haber_link"].ToString();
             
-
             try
             {
                 //con.Open();
@@ -130,7 +129,6 @@ namespace HaberCekme
                     
                     listBox1.Items.Add(sss);
                 }
-
                 
                 return;       
            
@@ -139,13 +137,51 @@ namespace HaberCekme
             {
                 listBox1.Items.Add(err.ToString());
             }
-          
-            con.Close();
-      
+            con.Close(); 
         }
 
-       
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
 
+
+            for (int i = 0; i < listBox1.Items.Count; i++) {
+                         
+         
+                try
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+                    islem = con.BeginTransaction();
+                    
+                    string kayit = " insert into table_icerik (haber_icerik)values(@haber_icerik) ";
+                    SqlCommand cmd = new SqlCommand(kayit, con);
+
+                    cmd.Transaction = islem;
+
+                    cmd.Parameters.AddWithValue("@haber_icerik", listBox1.Items[i].ToString());
+
+
+                    cmd.ExecuteNonQuery();
+                    islem.Commit();
+
+                }catch(SqlException err)
+                {
+                    islem.Rollback();
+                    
+                    MessageBox.Show(err.ToString());
+                }
+
+
+
+
+
+
+            }            
+            con.Close();
+            MessageBox.Show("Saved!!");
+
+        }
     }
 
       

@@ -33,5 +33,15 @@ namespace HaberCekme.Properties {
                 return ((string)(this["haberCekConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:64951/WebService1.asmx")]
+        public string HaberCekme_localhost_WebService1 {
+            get {
+                return ((string)(this["HaberCekme_localhost_WebService1"]));
+            }
+        }
     }
 }
