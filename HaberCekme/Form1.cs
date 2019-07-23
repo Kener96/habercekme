@@ -168,6 +168,7 @@ namespace HaberCekme
                 }catch(SqlException err)
                 {
                     islem.Rollback();
+                    
                     MessageBox.Show(err.ToString());
                 }
 
@@ -178,7 +179,7 @@ namespace HaberCekme
 
             }            
             con.Close();
-            MessageBox.Show("Saved!");
+            MessageBox.Show("Saved!!");
 
         }
     }
